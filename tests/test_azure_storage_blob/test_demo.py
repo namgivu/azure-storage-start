@@ -1,11 +1,14 @@
 import os, uuid
 from azure.storage.blob import BlobServiceClient
 from dotenv import load_dotenv
+
 path = os.path.abspath(__file__ + '/../')
 root = os.path.abspath(__file__ + '/../../../')
 
-load_dotenv()
+load_dotenv()  # load the .env for unittest; required in macos
+
 class Test:
+
     def test00__AZURE_STORAGE_CONNECTION_STRING(self):
         """
         in .env require AZURE_STORAGE_CONNECTION_STRING
@@ -21,7 +24,6 @@ class Test:
         """
         connect_str = os.environ.get('AZURE_STORAGE_CONNECTION_STRING')
         blob_service_client = BlobServiceClient.from_connection_string(connect_str)
-
 
     def test02_create_container(self):
         """
