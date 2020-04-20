@@ -37,3 +37,7 @@ class Test:
 
         container_client = blob_service_client.create_container(container_name)
         #TODO why we have error  > E azure.core.exceptions.HttpResponseError: The specifed resource name contains invalid characters.
+
+
+    def TODOtest03_upload_dummy_pdf(self):
+        pass
