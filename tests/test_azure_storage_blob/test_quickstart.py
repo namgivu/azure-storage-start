@@ -8,8 +8,9 @@ APP_HOME = os.path.abspath(PWD + '/../../')
 
 load_dotenv()  # load the .env for unittest; required in macos
 
-def YmdHMS():
-    return datetime.now().strftime('%Y%m%d-%H%M%S')
+def YmdHMSf():
+    return datetime.now().strftime('%Y%m%d-%H%M%S-%f')
+    #                                             millisecond ref. https://stackoverflow.com/a/18406412/248616
 
 class Test:
     """
@@ -36,7 +37,7 @@ class Test:
     def test02a_create_container(self):
         connect_str         = os.environ.get('AZURE_STORAGE_CONNECTION_STRING')
         blob_service_client = BlobServiceClient.from_connection_string(connect_str)
-        container_name      = f"test-{YmdHMS()}"
+        container_name      = f"test-{YmdHMSf()}"
         _                   = blob_service_client.create_container(container_name)
 
 
@@ -45,7 +46,7 @@ class Test:
         blob_service_client = BlobServiceClient.from_connection_string(connect_str)
 
         # prepare container to delete ie create it first to delete later
-        container_name = f"test-{YmdHMS()}"; _ = blob_service_client.create_container(container_name)
+        container_name = f"test-{YmdHMSf()}"; _ = blob_service_client.create_container(container_name)
 
         # delete container
         blob_service_client.delete_container(container_name)
@@ -61,11 +62,11 @@ class Test:
         blob_service_client = BlobServiceClient.from_connection_string(connect_str)
 
         # load container
-        container_name      = f'test{YmdHMS()}'
+        container_name      = f'test{YmdHMSf()}'
         container_client    = blob_service_client.create_container(container_name)
 
         # blob upload
-        blob_client = blob_service_client.get_blob_client(container=container_name, blob=f'dummy-blob-{YmdHMS()}')
+        blob_client = blob_service_client.get_blob_client(container=container_name, blob=f'dummy-blob-{YmdHMSf()}')
         with open(f'{PWD}/dummy-blob.pdf', 'rb') as data: blob_client.upload_blob(data)
 
         # list blob
@@ -80,8 +81,8 @@ class Test:
         connect_str         = os.environ.get('AZURE_STORAGE_CONNECTION_STRING')
         blob_service_client = BlobServiceClient.from_connection_string(connect_str)
 
-        container_name = f'test-{YmdHMS()}'  ; _ = blob_service_client.create_container(container_name)  # prepare the container
-        blob_name      = f'dummy-{YmdHMS()}'
+        container_name = f'test-{YmdHMSf()}'  ; _ = blob_service_client.create_container(container_name)  # prepare the container
+        blob_name      = f'dummy-{YmdHMSf()}'
 
         # upload the blob so as to download it later
         blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
@@ -103,7 +104,7 @@ class Test:
         assert container_name in [ c.name for c in containers ]
 
         # upload to it
-        blob_client = blob_service_client.get_blob_client(container=container_name, blob=f'dummy-blob-{YmdHMS()}')
+        blob_client = blob_service_client.get_blob_client(container=container_name, blob=f'dummy-blob-{YmdHMSf()}')
         with open(f'{PWD}/dummy-blob.pdf', 'rb') as f: blob_client.upload_blob(f)
 
         # aftermath list the blobs in the container
