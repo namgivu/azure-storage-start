@@ -9,6 +9,7 @@ verify_ssl = true
 azure-storage-blob = "*"
 pytest = "*"
 pytest-dotenv = "*"
+pytest-xdist = "*"  # run test in multiple threads aka parallel run
 
 [requires]
 python_version = "3.6"
