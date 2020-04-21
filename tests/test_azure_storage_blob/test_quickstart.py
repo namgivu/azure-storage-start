@@ -98,7 +98,7 @@ class Test:
         blob_service_client = BlobServiceClient.from_connection_string(connect_str)
 
         #TODO check container exists
-        containers = blob_service_client.list_containers()
+        # containers = blob_service_client.list_containers()
 
         container_name = "demo-upload-container"
         container_client = blob_service_client.get_container_client(container=container_name)
