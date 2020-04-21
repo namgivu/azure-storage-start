@@ -11,4 +11,5 @@ pytest = "*"
 pytest-dotenv = "*"
 
 [requires]
-python_version = "3.7"
+python_version = "3.6"
+#python_version = "3.7"  # working fine too
