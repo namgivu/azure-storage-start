@@ -37,41 +37,42 @@ class Test:
         container_name      = f"test-{YmdHMS()}"
         _                   = blob_service_client.create_container(container_name)
 
-    def test03_upload_dummy_pdf(self):
+    def test03_upload_dummy_blob(self):
         # open connection
         connect_str         = os.environ.get('AZURE_STORAGE_CONNECTION_STRING')
         blob_service_client = BlobServiceClient.from_connection_string(connect_str)
 
         # load container
-        container_name      = f"test{YmdHMS()}"
+        container_name      = f'test{YmdHMS()}'
         container_client    = blob_service_client.create_container(container_name)
 
         # blob upload
-        blob_client = blob_service_client.get_blob_client(container=container_name, blob=f"dummy-{YmdHMS()}")
-        with open(f'{PWD}/dummy-blob.pdf', "rb") as data:
-            blob_client.upload_blob(data)
+        blob_client = blob_service_client.get_blob_client(container=container_name, blob=f'dummy-blob-{YmdHMS()}')
+        with open(f'{PWD}/dummy-blob.pdf', 'rb') as data: blob_client.upload_blob(data)
 
+        # list blob
         print('list blob')
         blob_list = container_client.list_blobs()
         for blob in blob_list:
-            # assert type(blob.name) == str
+            assert type(blob.name) == str
             print(f'blob.name={blob.name}')
 
-    def test04_download_dummy_pdf(self):
-        connect_str = os.environ.get('AZURE_STORAGE_CONNECTION_STRING')
+
+    def test04_download_dummy_blob(self):
+        connect_str         = os.environ.get('AZURE_STORAGE_CONNECTION_STRING')
         blob_service_client = BlobServiceClient.from_connection_string(connect_str)
 
-        container_name = f"test-{YmdHMS()}"
+        container_name = f'test-{YmdHMS()}'
+        blob_name      = f'dummy-{YmdHMS()}'
 
-        container_client = blob_service_client.create_container(container_name)
-
-        blob_name = f"dummy-{YmdHMS()}"
+        # upload the blob so as to download it later
         blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
-        with open(f'{PWD}/dummy-blob.pdf', "rb") as data:
-            blob_client.upload_blob(data)
+        with open(f'{PWD}/dummy-blob.pdf', 'rb') as f_upload: blob_client.upload_blob(f_upload)
 
-        with open(f'{APP_HOME}/data/{blob_name}.pdf', "wb") as download_file:
-            download_file.write(blob_client.download_blob().readall())
+        # download it
+        with open(f'{APP_HOME}/data/{blob_name}.pdf', 'wb') as f_download:
+            f_download.write(blob_client.download_blob().readall())
+
 
     def test05_delete_container(self):
         connect_str         = os.environ.get('AZURE_STORAGE_CONNECTION_STRING')
@@ -90,8 +91,8 @@ class Test:
         container_name = "demo-upload-container"
         container_client = blob_service_client.get_container_client(container=container_name)
 
-        blob_client = blob_service_client.get_blob_client(container=container_name, blob=f"dummy-{YmdHMS()}")
-        with open(f'{PWD}/dummy-blob.pdf', "rb") as data:
+        blob_client = blob_service_client.get_blob_client(container=container_name, blob=f'dummy-blob-{YmdHMS()}')
+        with open(f'{PWD}/dummy-blob.pdf', 'rb') as data:
             blob_client.upload_blob(data)
 
         # List the blobs in the container

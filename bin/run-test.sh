@@ -17,5 +17,5 @@ pipenv run pytest -s tests/test_azure_storage_blob/test_quickstart.py::Test::tes
 #                 #run specific testcase        at this file           class test_method
 EOF
 
-[[ -z $skippipeenvsync ]] || pipenv sync;                   pipenv run pytest $@
+[[ -z $skippipeenvsync ]] || pipenv sync;        pipenv run pytest $@
 # ensure package installed     # run test        any extra params applied
