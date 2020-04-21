@@ -31,11 +31,12 @@ class Test:
         _           = BlobServiceClient.from_connection_string(connect_str)
 
 
-    def test02_create_container(self):
+    def test02a_create_container(self):
         connect_str         = os.environ.get('AZURE_STORAGE_CONNECTION_STRING')
         blob_service_client = BlobServiceClient.from_connection_string(connect_str)
         container_name      = f"test-{YmdHMS()}"
         _                   = blob_service_client.create_container(container_name)
+
 
     def test03_upload_dummy_blob(self):
         # open connection
@@ -67,26 +68,31 @@ class Test:
 
         # upload the blob so as to download it later
         blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
-        with open(f'{PWD}/dummy-blob.pdf', 'rb') as f_upload: blob_client.upload_blob(f_upload)
+        with open(f'{PWD}/dummy-blob.pdf', 'rb') as f_upload:
+            blob_client.upload_blob(f_upload)
 
         # download it
         with open(f'{APP_HOME}/data/{blob_name}.pdf', 'wb') as f_download:
             f_download.write(blob_client.download_blob().readall())
 
 
-    def test05_delete_container(self):
+    def test02b_delete_container(self):
         connect_str         = os.environ.get('AZURE_STORAGE_CONNECTION_STRING')
         blob_service_client = BlobServiceClient.from_connection_string(connect_str)
 
-        container_name = f"test-{YmdHMS()}"
+        # prepare container to delete ie create it first to delete later
+        container_name = f"test-{YmdHMS()}"; _ = blob_service_client.create_container(container_name)
 
-        container_client = blob_service_client.create_container(container_name)
-
+        # delete container
         blob_service_client.delete_container(container_name)
 
-    def test06_upload_to_existed_container(self):
+
+    def test06_upload_to_existing_container(self):
         connect_str = os.environ.get('AZURE_STORAGE_CONNECTION_STRING')
         blob_service_client = BlobServiceClient.from_connection_string(connect_str)
+
+        #TODO check container exists
+        containers = blob_service_client.list_containers()
 
         container_name = "demo-upload-container"
         container_client = blob_service_client.get_container_client(container=container_name)
