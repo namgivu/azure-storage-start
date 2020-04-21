@@ -8,6 +8,9 @@ root = os.path.abspath(__file__ + '/../../../')
 
 load_dotenv()  # load the .env for unittest; required in macos
 
+def YmdHMS():
+    return datetime.now().strftime('%Y%m%d-%H%M%S')
+
 class Test:
 
     def test00_AZURE_STORAGE_CONNECTION_STRING(self):
@@ -34,16 +37,16 @@ class Test:
         """
         connect_str         = os.environ.get('AZURE_STORAGE_CONNECTION_STRING')
         blob_service_client = BlobServiceClient.from_connection_string(connect_str)
-        container_name = f"test-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
+        container_name      = f"test-{YmdHMS()}"
         _                   = blob_service_client.create_container(container_name)
 
     def test03_upload_dummy_pdf(self):
         connect_str         = os.environ.get('AZURE_STORAGE_CONNECTION_STRING')
         blob_service_client = BlobServiceClient.from_connection_string(connect_str)
-        container_name      = f"test{datetime.now().strftime('%Y%m%d-%H%M%S')}"
+        container_name      = f"test{YmdHMS()}"
         container_client    = blob_service_client.create_container(container_name)
 
-        blob_client = blob_service_client.get_blob_client(container=container_name, blob=f"dummy-{datetime.now().strftime('%Y%m%d-%H%M%S')}")
+        blob_client = blob_service_client.get_blob_client(container=container_name, blob=f"dummy-{YmdHMS()}")
         with open(f'{path}/dummy.pdf', "rb") as data:
             blob_client.upload_blob(data)
 
@@ -56,11 +59,11 @@ class Test:
         connect_str = os.environ.get('AZURE_STORAGE_CONNECTION_STRING')
         blob_service_client = BlobServiceClient.from_connection_string(connect_str)
 
-        container_name = f"test-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
+        container_name = f"test-{YmdHMS()}"
 
         container_client = blob_service_client.create_container(container_name)
 
-        blob_name = f"dummy-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
+        blob_name = f"dummy-{YmdHMS()}"
         blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
         with open(f'{path}/dummy.pdf', "rb") as data:
             blob_client.upload_blob(data)
@@ -72,7 +75,7 @@ class Test:
         connect_str         = os.environ.get('AZURE_STORAGE_CONNECTION_STRING')
         blob_service_client = BlobServiceClient.from_connection_string(connect_str)
 
-        container_name = f"test-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
+        container_name = f"test-{YmdHMS()}"
 
         container_client = blob_service_client.create_container(container_name)
 
@@ -85,7 +88,7 @@ class Test:
         container_name = "demo-upload-container"
         container_client = blob_service_client.get_container_client(container=container_name)
 
-        blob_client = blob_service_client.get_blob_client(container=container_name, blob=f"dummy-{datetime.now().strftime('%Y%m%d-%H%M%S')}")
+        blob_client = blob_service_client.get_blob_client(container=container_name, blob=f"dummy-{YmdHMS()}")
         with open(f'{path}/dummy.pdf', "rb") as data:
             blob_client.upload_blob(data)
 
