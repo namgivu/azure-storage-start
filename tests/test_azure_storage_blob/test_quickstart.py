@@ -12,6 +12,11 @@ def YmdHMS():
     return datetime.now().strftime('%Y%m%d-%H%M%S')
 
 class Test:
+    """
+    sample code from quickstart guide
+    ref. https://docs.microsoft.com/en-us/azure/storage/blobs/storage-quickstart-blobs-python
+    ref. https://docs.microsoft.com/en-us/azure/storage/blobs/storage-quickstart-blobs-python#get-the-connection-string
+    """
 
     def test00_AZURE_STORAGE_CONNECTION_STRING(self):
         """
@@ -22,21 +27,11 @@ class Test:
 
 
     def test01_open_connection(self):
-        """
-        sample code from quickstart guide
-        ref. https://docs.microsoft.com/en-us/azure/storage/blobs/storage-quickstart-blobs-python
-        ref. https://docs.microsoft.com/en-us/azure/storage/blobs/storage-quickstart-blobs-python#get-the-connection-string
-        """
         connect_str = os.environ.get('AZURE_STORAGE_CONNECTION_STRING')
         _           = BlobServiceClient.from_connection_string(connect_str)
 
 
     def test02_create_container(self):
-        """
-        sample code from quickstart guide
-        ref. https://docs.microsoft.com/en-us/azure/storage/blobs/storage-quickstart-blobs-python
-        ref. https://docs.microsoft.com/en-us/azure/storage/blobs/storage-quickstart-blobs-python#get-the-connection-string
-        """
         connect_str         = os.environ.get('AZURE_STORAGE_CONNECTION_STRING')
         blob_service_client = BlobServiceClient.from_connection_string(connect_str)
         container_name      = f"test-{YmdHMS()}"
@@ -56,10 +51,11 @@ class Test:
         with open(f'{PWD}/dummy-blob.pdf', "rb") as data:
             blob_client.upload_blob(data)
 
-        # list the blobs in the container
+        print('list blob')
         blob_list = container_client.list_blobs()
         for blob in blob_list:
-            assert type(blob.name) == str
+            # assert type(blob.name) == str
+            print(f'blob.name={blob.name}')
 
     def test04_download_dummy_pdf(self):
         connect_str = os.environ.get('AZURE_STORAGE_CONNECTION_STRING')
