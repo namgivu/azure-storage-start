@@ -1,4 +1,5 @@
-import os, uuid
+import os
+from datetime import datetime
 from azure.storage.blob import BlobServiceClient
 from dotenv import load_dotenv
 path = os.path.abspath(__file__ + '/../')
@@ -32,7 +33,7 @@ class Test:
         connect_str = os.environ.get('AZURE_STORAGE_CONNECTION_STRING')
         blob_service_client = BlobServiceClient.from_connection_string(connect_str)
 
-        container_name = f"test-{str(uuid.uuid4())}"
+        container_name = f"test-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
 
         container_client = blob_service_client.create_container(container_name)
 
@@ -40,11 +41,11 @@ class Test:
         connect_str = os.environ.get('AZURE_STORAGE_CONNECTION_STRING')
         blob_service_client = BlobServiceClient.from_connection_string(connect_str)
 
-        container_name = f"test{str(uuid.uuid4())}"
+        container_name = f"test{datetime.now().strftime('%Y%m%d-%H%M%S')}"
 
         container_client = blob_service_client.create_container(container_name)
 
-        blob_client = blob_service_client.get_blob_client(container=container_name, blob=f'dummy-{str(uuid.uuid4())}')
+        blob_client = blob_service_client.get_blob_client(container=container_name, blob=f"dummy-{datetime.now().strftime('%Y%m%d-%H%M%S')}")
         with open(f'{path}/dummy.pdf', "rb") as data:
             blob_client.upload_blob(data)
 
@@ -57,11 +58,11 @@ class Test:
         connect_str = os.environ.get('AZURE_STORAGE_CONNECTION_STRING')
         blob_service_client = BlobServiceClient.from_connection_string(connect_str)
 
-        container_name = f"test-{str(uuid.uuid4())}"
+        container_name = f"test-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
 
         container_client = blob_service_client.create_container(container_name)
 
-        blob_name = f'dummy-{str(uuid.uuid4())}'
+        blob_name = f"dummy-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
         blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
         with open(f'{path}/dummy.pdf', "rb") as data:
             blob_client.upload_blob(data)
@@ -73,7 +74,7 @@ class Test:
         connect_str = os.environ.get('AZURE_STORAGE_CONNECTION_STRING')
         blob_service_client = BlobServiceClient.from_connection_string(connect_str)
 
-        container_name = f"test-{str(uuid.uuid4())}"
+        container_name = f"test-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
 
         container_client = blob_service_client.create_container(container_name)
 
@@ -86,7 +87,7 @@ class Test:
         container_name = "demo-upload-container"
         container_client = blob_service_client.get_container_client(container=container_name)
 
-        blob_client = blob_service_client.get_blob_client(container=container_name, blob=f'dummy-{str(uuid.uuid4())}')
+        blob_client = blob_service_client.get_blob_client(container=container_name, blob=f"dummy-{datetime.now().strftime('%Y%m%d-%H%M%S')}")
         with open(f'{path}/dummy.pdf', "rb") as data:
             blob_client.upload_blob(data)
 
