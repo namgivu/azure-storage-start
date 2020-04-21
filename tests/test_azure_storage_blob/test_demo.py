@@ -3,8 +3,8 @@ from datetime import datetime
 from azure.storage.blob import BlobServiceClient
 from dotenv import load_dotenv
 
-path = os.path.abspath(__file__ + '/../')
-root = os.path.abspath(__file__ + '/../../../')
+PWD      = os.path.abspath(__file__ + '/../')
+APP_HOME = os.path.abspath(PWD + '/../../')
 
 load_dotenv()  # load the .env for unittest; required in macos
 
@@ -20,6 +20,7 @@ class Test:
         connect_str = os.environ.get('AZURE_STORAGE_CONNECTION_STRING')
         assert connect_str is not None
 
+
     def test01_open_connection(self):
         """
         sample code from quickstart guide
@@ -28,6 +29,7 @@ class Test:
         """
         connect_str = os.environ.get('AZURE_STORAGE_CONNECTION_STRING')
         _           = BlobServiceClient.from_connection_string(connect_str)
+
 
     def test02_create_container(self):
         """
@@ -41,16 +43,20 @@ class Test:
         _                   = blob_service_client.create_container(container_name)
 
     def test03_upload_dummy_pdf(self):
+        # open connection
         connect_str         = os.environ.get('AZURE_STORAGE_CONNECTION_STRING')
         blob_service_client = BlobServiceClient.from_connection_string(connect_str)
+
+        # load container
         container_name      = f"test{YmdHMS()}"
         container_client    = blob_service_client.create_container(container_name)
 
+        # blob upload
         blob_client = blob_service_client.get_blob_client(container=container_name, blob=f"dummy-{YmdHMS()}")
-        with open(f'{path}/dummy.pdf', "rb") as data:
+        with open(f'{PWD}/dummy-blob.pdf', "rb") as data:
             blob_client.upload_blob(data)
 
-        # List the blobs in the container
+        # list the blobs in the container
         blob_list = container_client.list_blobs()
         for blob in blob_list:
             assert type(blob.name) == str
@@ -65,10 +71,10 @@ class Test:
 
         blob_name = f"dummy-{YmdHMS()}"
         blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
-        with open(f'{path}/dummy.pdf', "rb") as data:
+        with open(f'{PWD}/dummy-blob.pdf', "rb") as data:
             blob_client.upload_blob(data)
 
-        with open(f'{root}/data/{blob_name}.pdf', "wb") as download_file:
+        with open(f'{APP_HOME}/data/{blob_name}.pdf', "wb") as download_file:
             download_file.write(blob_client.download_blob().readall())
 
     def test05_delete_container(self):
@@ -89,7 +95,7 @@ class Test:
         container_client = blob_service_client.get_container_client(container=container_name)
 
         blob_client = blob_service_client.get_blob_client(container=container_name, blob=f"dummy-{YmdHMS()}")
-        with open(f'{path}/dummy.pdf', "rb") as data:
+        with open(f'{PWD}/dummy-blob.pdf', "rb") as data:
             blob_client.upload_blob(data)
 
         # List the blobs in the container
