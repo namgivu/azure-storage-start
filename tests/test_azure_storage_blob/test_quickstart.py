@@ -62,7 +62,7 @@ class Test:
         connect_str         = os.environ.get('AZURE_STORAGE_CONNECTION_STRING')
         blob_service_client = BlobServiceClient.from_connection_string(connect_str)
 
-        container_name = f'test-{YmdHMS()}'
+        container_name = f'test-{YmdHMS()}'  ; _ = blob_service_client.create_container(container_name)  # prepare the container
         blob_name      = f'dummy-{YmdHMS()}'
 
         # upload the blob so as to download it later
