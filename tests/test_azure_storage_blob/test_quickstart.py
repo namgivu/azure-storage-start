@@ -112,7 +112,13 @@ class Test:
         for blob in blob_list:
             assert type(blob.name) == str
 
+    def test07_cleanup_container(self):
+        connect_str = os.environ.get('AZURE_STORAGE_CONNECTION_STRING')
+        blob_service_client = BlobServiceClient.from_connection_string(connect_str)
 
-    #TODO Trang 's blob delete code
+        containers_list = blob_service_client.list_containers()
+        for container in containers_list:
+            if ('test' in container.name) == True:
+                blob_service_client.delete_container(container.name)
 
     #endregion blob crud
