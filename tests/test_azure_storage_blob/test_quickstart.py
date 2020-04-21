@@ -31,12 +31,29 @@ class Test:
         _           = BlobServiceClient.from_connection_string(connect_str)
 
 
+    #region container crud
+
     def test02a_create_container(self):
         connect_str         = os.environ.get('AZURE_STORAGE_CONNECTION_STRING')
         blob_service_client = BlobServiceClient.from_connection_string(connect_str)
         container_name      = f"test-{YmdHMS()}"
         _                   = blob_service_client.create_container(container_name)
 
+
+    def test02b_delete_container(self):
+        connect_str         = os.environ.get('AZURE_STORAGE_CONNECTION_STRING')
+        blob_service_client = BlobServiceClient.from_connection_string(connect_str)
+
+        # prepare container to delete ie create it first to delete later
+        container_name = f"test-{YmdHMS()}"; _ = blob_service_client.create_container(container_name)
+
+        # delete container
+        blob_service_client.delete_container(container_name)
+
+    #endregion container crud
+
+
+    #region blob crud
 
     def test03_upload_dummy_blob(self):
         # open connection
@@ -76,17 +93,6 @@ class Test:
             f_download.write(blob_client.download_blob().readall())
 
 
-    def test02b_delete_container(self):
-        connect_str         = os.environ.get('AZURE_STORAGE_CONNECTION_STRING')
-        blob_service_client = BlobServiceClient.from_connection_string(connect_str)
-
-        # prepare container to delete ie create it first to delete later
-        container_name = f"test-{YmdHMS()}"; _ = blob_service_client.create_container(container_name)
-
-        # delete container
-        blob_service_client.delete_container(container_name)
-
-
     def test06_upload_to_existing_container(self):
         connect_str = os.environ.get('AZURE_STORAGE_CONNECTION_STRING')
         blob_service_client = BlobServiceClient.from_connection_string(connect_str)
@@ -105,3 +111,8 @@ class Test:
         blob_list = container_client.list_blobs()
         for blob in blob_list:
             assert type(blob.name) == str
+
+
+    #TODO Trang 's blob delete code
+
+    #endregion blob crud
