@@ -97,20 +97,21 @@ class Test:
         connect_str = os.environ.get('AZURE_STORAGE_CONNECTION_STRING')
         blob_service_client = BlobServiceClient.from_connection_string(connect_str)
 
-        #TODO check container exists
-        # containers = blob_service_client.list_containers()
+        # check container exists
+        container_name = 'demo-upload-container'
+        containers = blob_service_client.list_containers()
+        assert container_name in [ c.name for c in containers ]
 
-        container_name = "demo-upload-container"
-        container_client = blob_service_client.get_container_client(container=container_name)
-
+        # upload to it
         blob_client = blob_service_client.get_blob_client(container=container_name, blob=f'dummy-blob-{YmdHMS()}')
-        with open(f'{PWD}/dummy-blob.pdf', 'rb') as data:
-            blob_client.upload_blob(data)
+        with open(f'{PWD}/dummy-blob.pdf', 'rb') as f: blob_client.upload_blob(f)
 
-        # List the blobs in the container
+        # aftermath list the blobs in the container
+        container_client = blob_service_client.get_container_client(container=container_name)
         blob_list = container_client.list_blobs()
         for blob in blob_list:
             assert type(blob.name) == str
+
 
     def test07_cleanup_container(self):
         connect_str = os.environ.get('AZURE_STORAGE_CONNECTION_STRING')
@@ -118,7 +119,7 @@ class Test:
 
         containers_list = blob_service_client.list_containers()
         for container in containers_list:
-            if ('test' in container.name) == True:
+            if container.name.startswith('test'):  # container name as testXXX
                 blob_service_client.delete_container(container.name)
 
     #endregion blob crud
