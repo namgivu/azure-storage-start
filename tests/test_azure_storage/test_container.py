@@ -109,7 +109,7 @@ class Test:
         blob_service_client = BlobServiceClient.from_connection_string(connect_str)
 
         # check container exists
-        container_name = 'demo-upload-container'
+        container_name = 'some-container-for-testing'
         containers = blob_service_client.list_containers()
         assert container_name in [ c.name for c in containers ]
 
