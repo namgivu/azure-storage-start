@@ -51,6 +51,20 @@ class Test:
         # delete container
         blob_service_client.delete_container(container_name)
 
+
+    def test_container_exists(self):
+        """
+        In azure storage, we have containers listed separately in two places Containers and as 'File shares'
+        Here we test the code to load those file-share containers
+        """
+        connect_str         = os.environ.get('AZURE_STORAGE_CONNECTION_STRING')
+        blob_service_client = BlobServiceClient.from_connection_string(connect_str)
+
+        cc = blob_service_client.get_container_client(container='some-container-for-testing')  # cc aka container_client
+        try   : _ = cc.get_container_properties(); c_exist = True  # c_xxx aka container_xxx
+        except: c_exist = False
+
+        assert c_exist is True
     #endregion container crud
 
 
