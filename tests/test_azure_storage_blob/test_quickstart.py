@@ -53,10 +53,6 @@ class Test:
 
 
     def test_container_exists(self):
-        """
-        In azure storage, we have containers listed separately in two places Containers and as 'File shares'
-        Here we test the code to load those file-share containers
-        """
         connect_str         = os.environ.get('AZURE_STORAGE_CONNECTION_STRING')
         blob_service_client = BlobServiceClient.from_connection_string(connect_str)
 
