@@ -7,6 +7,8 @@ verify_ssl = true
 
 [packages]
 azure-storage-blob = "*"
+azure-storage-file-share = "*"
+
 pytest = "*"
 pytest-dotenv = "*"
 pytest-xdist = "*"  # run test in multiple threads aka parallel run
