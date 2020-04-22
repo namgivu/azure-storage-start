@@ -6,6 +6,7 @@ PWD = os.path.abspath(__file__ + '/../')
 EXISTING_SHARE_NAME = 'receivefromharvest'
 EXISTING_FOLDER     = 'archive'
 
+
 class Test:
 
     def test_connection(self):
@@ -47,3 +48,10 @@ class Test:
 
         # clean up :dummy_f
         file_client.delete_file()
+
+
+    #TODO test copy file using startCopyFile(url=env.AZURE_FILE_STORAGE_URL/from_SHARE_NAME/:fileName, to_SHARE_NAME, to_subFolder, to_fileName,
+    #                                                              from_url/      shareName/file
+    #                                                                                         fromUrl, to_XXX
+
+    #TODO test move file #CAUTION: There is NO move action, we have to startCopyFile() and delete() the file
